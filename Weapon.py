@@ -46,6 +46,7 @@ class Weapon:
         return self.type
 
     def use_weapon(self):
+        print("Weapon uses ", self.uses)
         self.uses -= 1
 
 

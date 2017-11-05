@@ -46,16 +46,6 @@ class Home(Observer, Observable):
             else:
                 self.monsters.append(Werewolf(self))
 
-    def notified_place_holder(self, monster):
-        """
-        Removes a monster from a house when notified that it was defeated and replaces
-        that monster with a new person
-        :param monster: The monster that is to be removed
-        """
-        # Remove monster, place person
-        self.monsters[monster] = Person(self)
-        print("notified_place_holder in Home() class")
-
     def get_monsters(self):
         return self.monsters
 
@@ -67,4 +57,8 @@ class Home(Observer, Observable):
 
     def update(self, *args, **kwargs):
         # Get rid of the monsters that were passed in, replace them with Persons
-        print("Rip monsters, have people. Update in Home() class")
+        for x in args:
+            for y in self.get_monsters():
+                if x is y:
+                    self.monsters.remove(x)
+                    self.monsters.append(Person(self))

@@ -69,14 +69,11 @@ class Player:
                 self.add_to_inventory(NerdBomb())
 
     def attack(self, name_of_attack):
-        # Make the string upper case so case isn't an issue
-        name_of_attack = name_of_attack.lower()
-
         # Find the weapon that attacked, handle it properly
         for x in self.inventory:
             # If the name of the attack matches a weapon in our inventory, use that weapon
-            if x.name() is name_of_attack:
-                x.use_weapon()
+            if x.name == name_of_attack:
+                x.uses -= 1
 
                 damage_dealt = self.attack_value * x.attack_modifier
 

@@ -69,11 +69,34 @@ class Game(Observer):
             self.player.in_home = self.neighborhood.home(self.player.in_home.get_x_pos(),
                                                          self.player.in_home.get_y_pos() + 1)
         elif action.lower() == "attack":
-            print("attack")
+            self.attack()
         elif action.lower() == "inventory":
             self.open_inventory()
         else:
             print("I don't know what", action, "means.")
+
+    def attack(self):
+        print("Attack with what?")
+        self.open_inventory()
+        weapon = input("").lower()
+
+        # Need error checking
+
+        for x in self.player.inventory:
+            if x.name.lower() == weapon:
+                weapon = x
+            elif x.name.lower() == weapon:
+                weapon = x
+            elif x.name.lower() == weapon:
+                weapon = x
+            elif x.name.lower() == weapon:
+                weapon = x
+
+        damage = self.player.attack(weapon.name)
+
+        # Attack all monsters in the house, monsters should calculate weaknesses and resistances
+        for monster in self.player.in_home.get_monsters():
+            monster.is_attacked(damage, weapon.get_type())
 
     def open_inventory(self):
         """
@@ -138,18 +161,16 @@ class Game(Observer):
         Iterates through all of the monsters in the house and shows how many of
         each monster there are left. Doesn't print if the house is empty
         """
+        person = 0
         zombies = 0
         vampires = 0
         ghouls = 0
         werewolves = 0
 
-        if len(self.player.in_home.get_monsters()) < 1:
-            # TODO: remove this and start showing persons
-            print("No monsters, they have all been defeated")
-            return
-
         for x in self.player.in_home.get_monsters():
-            if x.get_type() is Monsters.ZOMBIE:
+            if x.get_type() is Monsters.PERSON:
+                person += 1
+            elif x.get_type() is Monsters.ZOMBIE:
                 zombies += 1
             elif x.get_type() is Monsters.VAMPIRE:
                 vampires += 1
@@ -158,6 +179,11 @@ class Game(Observer):
             elif x.get_type() is Monsters.WEREWOLF:
                 werewolves += 1
 
+        if person > 0:
+            if person > 1:
+                print("{person} persons".format(person=person))
+            else:
+                print("{person} person".format(person=person))
         if zombies > 0:
             if zombies > 1:
                 print("{zombies} zombies".format(zombies=zombies))

@@ -13,7 +13,7 @@ class Observable(object):
 
     def sub(self, observer):
         """
-        Make observer subscribe to this observer service
+        Make observer subscribe to this observable service
         :param observer: Observer to become subscribed
         """
         if observer not in self.observers:

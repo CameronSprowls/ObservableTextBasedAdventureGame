@@ -49,6 +49,14 @@ class Monster(Observable):
     def get_type(self):
         return self.monster_type
 
+    def is_attacked(self, damage, weapon):
+        # TODO: Apply weaknesses and immunities here
+
+        self.health_points -= damage
+
+        if self.health_points < 0:
+            super().update_observers(self)
+
 
 class Person(Monster):
     """
@@ -56,7 +64,7 @@ class Person(Monster):
     """
 
     def __init__(self, home):
-        super().__init__((-1, -1), (100, 100), [], [], home)
+        super().__init__((-1, -1), (100, 100), [], [], home, Monsters.PERSON)
 
 
 class Zombie(Monster):
