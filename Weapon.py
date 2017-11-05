@@ -5,13 +5,16 @@ Huge file to hold all of the weapons
 import math
 import random
 
+from Enums import Weapons
+
 
 class Weapon:
 
-    def __init__(self, name, attack_modifier, uses):
+    def __init__(self, name, attack_modifier, uses, type):
         self.name = name
         self.attack_modifier = attack_modifier
         self.uses = uses
+        self.type = type
 
     # Properties of the weapon class
     @property
@@ -39,6 +42,9 @@ class Weapon:
     def uses(self, new_uses):
         self.__uses = new_uses
 
+    def get_type(self):
+        return self.type
+
     def use_weapon(self):
         self.uses -= 1
 
@@ -49,7 +55,7 @@ class HersheyKiss(Weapon):
     """
 
     def __init__(self):
-        super().__init__("Hershey Kiss", 1, math.inf)
+        super().__init__("Hershey's Kiss", 1, math.inf, Weapons.HERSHEY_KISS)
 
     def use_weapon(self):
         super().use_weapon()
@@ -61,7 +67,7 @@ class SourStraw(Weapon):
     """
 
     def __init__(self):
-        super().__init__("Sour Straw", 2, float(random.randint(100, 175)/100))
+        super().__init__("Sour Straw", float(random.randint(100, 175)/100), 2, Weapons.SOUR_STRAW)
 
     def use_weapon(self):
         super().use_weapon()
@@ -72,7 +78,7 @@ class ChocolateBar(Weapon):
     A chocolate bar, a decent weapon that has a lot of uses
     """
     def __init__(self):
-        super().__init__("Chocolate Bar", 4, float(random.randint(200, 240)/100))
+        super().__init__("Chocolate Bar", float(random.randint(200, 240)/100), 4, Weapons.CHOCOLATE_BAR)
 
     def use_weapon(self):
         super().use_weapon()
@@ -83,7 +89,7 @@ class NerdBomb(Weapon):
     A Nerd Bomb, an amazing weapon, unfortunately they only have one use
     """
     def __init__(self):
-        super().__init__("Nerd Bomb", 1, float(random.randint(350, 500)/100))
+        super().__init__("Nerd Bomb", float(random.randint(350, 500)/100), 1, Weapons.NERD_BOMB)
 
     def use_weapon(self):
         super().use_weapon()

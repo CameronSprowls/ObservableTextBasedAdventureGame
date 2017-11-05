@@ -2,8 +2,6 @@
 Class for a home.
 
 Homes observe the monsters living within, will be notified when a monster in defeated
-
-
 """
 
 from Monster import *
@@ -11,18 +9,20 @@ from Observer import Observer
 from Enums import Monsters
 
 
-class Home(Observer):
+class Home(Observer, Observable):
 
     monsters = []
+    x_pos = 0
+    y_pos = 0
 
-    @staticmethod
-    def main():
-        print(Home)
-
-    def __init__(self):
+    def __init__(self, x_pos, y_pos):
         """
         Constructor of a home. Set up all the basic properties of one
         """
+        super().__init__()
+        self.x_pos = x_pos
+        self.y_pos = y_pos
+        self.monsters = []
 
         # Create a random (0-10) number of monsters in the house
         self.gen_monsters(random.randint(1, 10))
@@ -34,7 +34,7 @@ class Home(Observer):
                              place inside of the house
         """
         # Decide a random number of monsters to add to the home
-        for x in range(0, num_monsters):
+        for x in range(num_monsters):
             # Create random monster, add to home
             monster_id = Monsters(random.randint(1, 4))
             if monster_id is Monsters.ZOMBIE:
@@ -54,7 +54,17 @@ class Home(Observer):
         """
         # Remove monster, place person
         self.monsters[monster] = Person(self)
-        print("notified_place_holder")
+        print("notified_place_holder in Home() class")
+
+    def get_monsters(self):
+        return self.monsters
+
+    def get_x_pos(self):
+        return self.x_pos
+
+    def get_y_pos(self):
+        return self.y_pos
 
     def update(self, *args, **kwargs):
-        pass
+        # Get rid of the monsters that were passed in, replace them with Persons
+        print("Rip monsters, have people. Update in Home() class")

@@ -9,6 +9,7 @@ TODO: figure out if I want to make the Monster class implement the weaknesses an
 import random
 
 from Observable import Observable
+from Enums import Monsters
 
 
 class Monster(Observable):
@@ -17,7 +18,7 @@ class Monster(Observable):
     Home observes monster
     """
 
-    def __init__(self, attack_range, health_range, weaknesses, resistances, home):
+    def __init__(self, attack_range, health_range, weaknesses, resistances, home, monster_type):
         super().__init__()
         super().sub(home)
 
@@ -25,6 +26,7 @@ class Monster(Observable):
         self.health_points = random.randint(health_range[0], health_range[1])
         self.weaknesses = weaknesses
         self.resistances = resistances
+        self.monster_type = monster_type
 
     # Properties of the monster class
     @property
@@ -44,6 +46,9 @@ class Monster(Observable):
     def health_points(self, health_points):
         self.__health_points = health_points
 
+    def get_type(self):
+        return self.monster_type
+
 
 class Person(Monster):
     """
@@ -60,7 +65,7 @@ class Zombie(Monster):
     """
 
     def __init__(self, home):
-        super().__init__((0, 10), (50, 100), [], [], home)
+        super().__init__((0, 10), (50, 100), [], [], home, Monsters.ZOMBIE)
 
 
 class Vampire(Monster):
@@ -69,7 +74,7 @@ class Vampire(Monster):
     """
 
     def __init__(self, home):
-        super().__init__((10, 20), (100, 200), [], [], home)
+        super().__init__((10, 20), (100, 200), [], [], home, Monsters.VAMPIRE)
 
 
 class Ghoul(Monster):
@@ -79,7 +84,7 @@ class Ghoul(Monster):
     """
 
     def __init__(self, home):
-        super().__init__((15, 30), (40, 80), [], [], home)
+        super().__init__((15, 30), (40, 80), [], [], home, Monsters.GHOUL)
 
 
 class Werewolf(Monster):
@@ -88,4 +93,4 @@ class Werewolf(Monster):
     """
 
     def __init__(self, home):
-        super().__init__((0, 40), (200, 200), [], [], home)
+        super().__init__((0, 40), (200, 200), [], [], home, Monsters.WEREWOLF)
