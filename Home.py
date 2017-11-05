@@ -15,11 +15,12 @@ class Home(Observer, Observable):
     x_pos = 0
     y_pos = 0
 
-    def __init__(self, x_pos, y_pos):
+    def __init__(self, x_pos, y_pos, neighborhood):
         """
         Constructor of a home. Set up all the basic properties of one
         """
         super().__init__()
+        super().sub(neighborhood)
         self.x_pos = x_pos
         self.y_pos = y_pos
         self.monsters = []
@@ -57,8 +58,12 @@ class Home(Observer, Observable):
 
     def update(self, *args, **kwargs):
         # Get rid of the monsters that were passed in, replace them with Persons
+        defeated = 0
         for x in args:
             for y in self.get_monsters():
                 if x is y:
                     self.monsters.remove(x)
                     self.monsters.append(Person(self))
+                    defeated += 1
+
+        super().update_observers(defeated)

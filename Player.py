@@ -2,17 +2,20 @@
 This represents the player of the game
 """
 
-from Enums import Weapons
 from Weapon import *
 import random
 
 
 class Player:
 
+    is_dead = False
+
     def __init__(self):
-        self.health = random.randint(100, 125)
-        self.attack_value = random.randint(10, 20)
+        # TODO: make the player not a god anymore (remove three zeros from randoms)
+        self.health = random.randint(100000, 125000)
+        self.attack_value = random.randint(1000, 2000)
         self.in_home = "in_home"
+        self.is_dead = False
 
         # Generate the weapons the player starts with and them to his inventory
         self.inventory = []
@@ -53,6 +56,9 @@ class Player:
     def inventory(self, inventory):
         self.__inventory = inventory
 
+    def get_is_dead(self):
+        return self.is_dead
+
     def gen_weapons(self):
         # Add the default Hershey's Kiss to the players inventory
         self.add_to_inventory(HersheyKiss())
@@ -69,6 +75,13 @@ class Player:
                 self.add_to_inventory(NerdBomb())
 
     def attack(self, name_of_attack):
+        # Make all of the monsters in the current home attack the player
+        for x in self.in_home.get_monsters():
+            self.health -= x.attack_strength
+
+        if self.health < 0:
+            self.is_dead = True
+
         # Find the weapon that attacked, handle it properly
         for x in self.inventory:
             # If the name of the attack matches a weapon in our inventory, use that weapon

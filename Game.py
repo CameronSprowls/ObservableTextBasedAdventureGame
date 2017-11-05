@@ -17,8 +17,8 @@ class Game(Observer):
     is_dead = False
 
     # Board size out here so we can change it whenever we want
-    board_x_size = 3
-    board_y_size = 3
+    board_x_size = 1
+    board_y_size = 1
 
     def main(self):
         """
@@ -32,11 +32,40 @@ class Game(Observer):
 
         self.show_start_description()
 
-        while not self.has_won or not self.is_dead:
+        while not self.has_won and not self.is_dead:
             print("You see: ")
             self.show_monsters_in_house()
+            print("Your health is: ", self.player.health)
+            print("There are {monster_num} monsters left in the neighborhood"
+                  .format(monster_num=self.neighborhood.monsters_left))
             self.do_action(self.get_action())
-            # Continue the game
+
+            # Check to see if the player has died, if they have, display the died message
+            if self.is_dead:
+                self.end_game_through_death()
+
+            # See if all of the monsters are dead
+            if self.neighborhood.monsters_left < 1:
+                self.has_won = True
+
+            # Check to see if the player has won, if they have, display the victory message
+            if self.has_won:
+                self.end_game_through_victory()
+
+    @staticmethod
+    def end_game_through_victory():
+        """
+        Displays a message that the player has won
+        """
+        print("You have emerged victorious, congrats!")
+
+    @staticmethod
+    def end_game_through_death():
+        """
+        Displays a message that the player has died
+        """
+        print("It appears you have died. So sorry.")
+        print("\n\n\n\nBetter luck next time!")
 
     @staticmethod
     def show_start_description():
@@ -80,7 +109,28 @@ class Game(Observer):
         self.open_inventory()
         weapon = input("").lower()
 
-        # Need error checking
+        valid_weapon = False
+
+        # Basic error checking/correction so the game runs smoother
+        while not valid_weapon:
+            if weapon == "hk" or weapon == "hershey's kisses" or weapon == "hershey's kiss":
+                weapon = "hershey's kiss"
+                valid_weapon = True
+            elif weapon == "ss" or weapon == "sour straws" or weapon == "sour straw":
+                weapon = "sour straw"
+                valid_weapon = True
+            elif weapon == "cb" or weapon == "chocolate bars" or weapon == "chocolate bar":
+                weapon = "chocolate bar"
+                valid_weapon = True
+            elif weapon == "nb" or weapon == "nerd bombs" or weapon == "nerd bomb":
+                weapon = "nerd bomb"
+                valid_weapon = True
+            elif weapon == "back":
+                print("Attack aborted.")
+                return
+            else:
+                print("{weapon} is not a weapon you posses".format(weapon=weapon))
+                weapon = input("Attack with what?\n")
 
         for x in self.player.inventory:
             if x.name.lower() == weapon:
@@ -93,6 +143,9 @@ class Game(Observer):
                 weapon = x
 
         damage = self.player.attack(weapon.name)
+
+        if self.player.get_is_dead():
+            self.is_dead = True
 
         # Attack all monsters in the house, monsters should calculate weaknesses and resistances
         for monster in self.player.in_home.get_monsters():
