@@ -1,3 +1,7 @@
+"""
+Some nice Enums for the game, for speed
+"""
+
 from enum import Enum
 
 

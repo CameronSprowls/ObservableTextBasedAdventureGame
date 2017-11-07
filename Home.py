@@ -1,5 +1,5 @@
 """
-Class for a home.
+File to hold the class for a home.
 
 Homes observe the monsters living within, will be notified when a monster in defeated
 """
@@ -10,23 +10,30 @@ from Enums import Monsters
 
 
 class Home(Observer, Observable):
+    """
+    Class for the home. Creates a home and has accessors and mutators.
+    """
 
+    # Instance variables
     monsters = []
     x_pos = 0
     y_pos = 0
 
-    def __init__(self, x_pos, y_pos, neighborhood):
+    def __init__(self, x_pos, y_pos):
         """
         Constructor of a home. Set up all the basic properties of one
         """
         super().__init__()
-        super().sub(neighborhood)
         self.x_pos = x_pos
         self.y_pos = y_pos
         self.monsters = []
 
         # Create a random (0-10) number of monsters in the house
         self.gen_monsters(random.randint(1, 10))
+
+    def sub(self, new_sub):
+        """Subscribe the new sub to the house service"""
+        super().sub(new_sub)
 
     def gen_monsters(self, num_monsters):
         """
@@ -48,15 +55,31 @@ class Home(Observer, Observable):
                 self.monsters.append(Werewolf(self))
 
     def get_monsters(self):
+        """
+        Getter for the monsters.
+        """
         return self.monsters
 
     def get_x_pos(self):
+        """
+        Gets the x position of house. Useful to figure out where the house is
+        for movement.
+        """
         return self.x_pos
 
     def get_y_pos(self):
+        """
+        Gets the y position of house. Useful to figure out where the house is
+        for movement.
+        """
         return self.y_pos
 
     def update(self, *args, **kwargs):
+        """
+        Called when a monster dies, replaces that monster with a person, and lets the game know
+        that a monster is gone and they should update the number of monsters they have
+        :param args: Monsters that were killed
+        """
         # Get rid of the monsters that were passed in, replace them with Persons
         defeated = 0
         for x in args:
@@ -65,5 +88,7 @@ class Home(Observer, Observable):
                     self.monsters.remove(x)
                     self.monsters.append(Person(self))
                     defeated += 1
+                    break
 
+        # Let the game know that a monster was defeated
         super().update_observers(defeated)
